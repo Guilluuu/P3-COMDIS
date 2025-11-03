@@ -12,7 +12,7 @@ run_servidor: state
 	java -cp "bin" Servidor
 
 run_cliente: state
-	java -cp "bin" Cliente
+	java -cp "bin" ModernChatUI
 
 run: state
 	kitty --hold -d "${PWD}" &
