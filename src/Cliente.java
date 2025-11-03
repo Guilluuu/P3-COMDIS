@@ -1,10 +1,10 @@
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Cliente implements IChatCliente {
+public class Cliente implements ChatClientInterface {
 
     private HashMap<String, Chat> chats;
     private String nombre;
@@ -12,6 +12,7 @@ public class Cliente implements IChatCliente {
     private Integer puerto;
     private ClienteCallback cb;
     private ArrayList<String> amigosConectados;
+    private boolean conectado = false;
 
     public Integer setPuerto(Integer puerto) {
         return this.puerto = puerto;
@@ -269,36 +270,133 @@ public class Cliente implements IChatCliente {
         System.out.println("Chat con " + nombre + " eliminado");
     }
 
-    /*
-     * private HashMap<String, Chat> chats;
-     * private String nombre;
-     * private String clave;
-     * private Integer puerto;
-     * private ClienteCallback cb;
-     * private ArrayList<String> amigosConectados;
-     */
-
     @Override
-    public boolean login(String usuario, String clave, int puerto) {
-        return cb.login(nombre, clave, puerto);
-    }
+    public boolean login(String username, String password, int port) {
+        try {
+            // inicializa callback si hace falta
+            if (cb == null)
+                cb = new ClienteCallback(this);
+            this.nombre = username;
+            this.clave = password;
+            this.puerto = port;
 
-    @Override
-    public boolean registrarUsuario(String usuario, String clave) {
-        return cb.registrarUsuario(usuario, clave);
+            boolean ok = cb.login(username, password, port);
+            this.conectado = ok;
+            return ok;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public void logout() {
-        cb.logout();
+        try {
+            if (cb != null)
+                cb.logout();
+        } catch (Exception ignore) {
+        }
+        conectado = false;
     }
 
     @Override
-    public List<String> getChatsActivos() {
-        return new ArrayList<>(chats.keySet());
+    public boolean signUp(String username, String password) {
+        try {
+            if (cb == null)
+                cb = new ClienteCallback(this);
+            return cb.registrarUsuario(username, password);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
+    public boolean isConnected() {
+        return conectado;
+    }
+
+    // ======= ChatClientInterface: MENSAJERÍA =======
+
+    @Override
+    public boolean sendMessage(String contact, String message) {
+        // ya tienes este método en Cliente; delegamos en él
+        return enviarMensaje(contact, message); // existente en tu clase
+    }
+
+    @Override
+    public List<String> getNewMessages(String contact) {
+        // método ya existente en tu clase (devuelve y drena)
+        return getNuevosMensajesChat(contact); // existente en tu clase
+    }
+
+    @Override
+    public java.util.Map<String, Integer> checkNewMessages() {
+        java.util.Map<String, Integer> res = new java.util.HashMap<>();
+        try {
+            // Recorre los chats activos y marca 1 si hay al menos uno pendiente (peek no
+            // destructivo)
+            for (String amigo : new java.util.ArrayList<>(chats.keySet())) {
+                Chat c = chats.get(amigo);
+                if (c == null)
+                    continue;
+                try {
+                    res.put(amigo, c.isEmpty() ? 0 : 1);
+                } catch (Exception e) {
+                    res.put(amigo, 0);
+                }
+            }
+        } catch (Exception ignore) {
+        }
+        return res;
+    }
+
+    @Override
+    public List<String> getActiveChats() {
+        return new java.util.ArrayList<>(chats.keySet());
+    }
+
+    // ======= ChatClientInterface: AMIGOS =======
+
+    @Override
+    public List<String> searchUsers(String query) {
+        // Si tienes búsqueda en el servidor, delega:
+        // return cb.buscarUsuarios(query);
+
+        // Fallback mínimo: si el usuario existe exactamente, devuélvelo.
+        java.util.List<String> out = new java.util.ArrayList<>();
+        try {
+            if (cb != null && cb.existeUsuario(query) && !query.equals(nombre)) {
+                out.add(query);
+            }
+        } catch (Exception ignore) {
+        }
+        return out;
+    }
+
+    @Override
+    public boolean sendFriendRequest(String username) {
+        return cb.solicitarAmistad(username); // ya lo tienes implementado
+    }
+
+    @Override
+    public List<String> getFriends() {
+        return cb.getAmigos(); // ya lo usas en tu mainloop
+    }
+
+    @Override
+    public List<String> getPendingFriendRequests() {
+        return cb.getSolicitudesPendientes(); // ya existe
+    }
+
+    @Override
+    public boolean acceptFriendRequest(String username) {
+        return cb.aceptarSolicitudAmistad(username); // ya existe
+    }
+
+    @Override
+    public boolean rejectFriendRequest(String username) {
+        return cb.rechazarSolicitudAmistad(username); // ya existe
+    }
+
     public List<String> getNuevosMensajesChat(String contact) {
         ArrayList<String> mensaje = new ArrayList<>();
         try {
@@ -311,7 +409,6 @@ public class Cliente implements IChatCliente {
         return mensaje;
     }
 
-    @Override
     public boolean enviarMensaje(String contacto, String mensaje) {
         if (chats.get(contacto) == null) {
             return false;
@@ -324,33 +421,6 @@ public class Cliente implements IChatCliente {
             return false;
         }
 
-    }
-
-    @Override
-    public List<String> buscarUsuarios(String query) {
-    //TODO
-    //return cb.buscarUsuarios(query);
-    return null;
-    }
-
-    @Override
-    public boolean solicitarAmistad(String usuario) {
-        return cb.solicitarAmistad(usuario);
-    }
-
-    @Override
-    public List<String> getSolicitudesPendientes() {
-        return cb.getSolicitudesPendientes();
-    }
-
-    @Override
-    public boolean aceptarSolicitudAmistad(String usuario) {
-        return cb.aceptarSolicitudAmistad(usuario);
-    }
-
-    @Override
-    public boolean rechazarSolicitudAmistad(String usuario) {
-        return cb.rechazarSolicitudAmistad(usuario);
     }
 
     public static void main(String[] args) {
