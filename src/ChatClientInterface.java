@@ -1,120 +1,112 @@
 // ChatClientInterface.java
 import java.util.List;
+import java.util.Map;
 
 /**
- * Interfaz que debe implementar el cliente de chat.
- * Define todas las operaciones necesarias para la comunicación con el servidor.
+ * Interfaz que debe implementar el cliente de chat para conectar con la UI
  */
 public interface ChatClientInterface {
     
-    // ============ AUTENTICACIÓN ============
+    // ============ OPERACIONES DE AUTENTICACIÓN ============
     
     /**
-     * Inicia sesión con las credenciales del usuario.
+     * Inicia sesión en el servidor de chat
      * @param username Nombre de usuario
      * @param password Contraseña
-     * @param port Puerto del servidor
+     * @param port Puerto de conexión
      * @return true si el login fue exitoso, false en caso contrario
      */
     boolean login(String username, String password, int port);
     
     /**
-     * Registra un nuevo usuario en el sistema.
-     * @param username Nombre de usuario deseado
+     * Cierra sesión en el servidor
+     */
+    void logout();
+    
+    /**
+     * Registra un nuevo usuario en el sistema
+     * @param username Nombre de usuario
      * @param password Contraseña
      * @return true si el registro fue exitoso, false si el usuario ya existe
      */
     boolean signUp(String username, String password);
     
     /**
-     * Cierra la sesión del usuario actual.
+     * Verifica si el cliente está conectado al servidor
+     * @return true si está conectado, false en caso contrario
      */
-    void logout();
+    boolean isConnected();
     
-    // ============ MENSAJERÍA ============
+    
+    // ============ OPERACIONES DE MENSAJERÍA ============
     
     /**
-     * Envía un mensaje a otro usuario.
-     * @param recipient Usuario destinatario
-     * @param message Contenido del mensaje
+     * Envía un mensaje a un contacto
+     * @param contact Nombre del contacto
+     * @param message Mensaje a enviar
      * @return true si el mensaje se envió correctamente
      */
-    boolean sendMessage(String recipient, String message);
+    boolean sendMessage(String contact, String message);
     
     /**
-     * Obtiene los mensajes nuevos de un contacto específico.
-     * @param contact Usuario del que se desean obtener mensajes
-     * @return Lista de mensajes formateados como "remitente: contenido"
+     * Obtiene los mensajes nuevos de un contacto específico
+     * @param contact Nombre del contacto
+     * @return Lista de mensajes en formato String
      */
     List<String> getNewMessages(String contact);
     
     /**
-     * Verifica si hay mensajes nuevos de algún contacto.
-     * @return Mapa con contactos como clave y cantidad de mensajes nuevos como valor
+     * Verifica si hay mensajes nuevos de todos los contactos
+     * @return Mapa con contacto como clave y cantidad de mensajes nuevos como valor
      */
-    java.util.Map<String, Integer> checkNewMessages();
-    
-    // ============ CONTACTOS Y AMIGOS ============
+    Map<String, Integer> checkNewMessages();
     
     /**
-     * Obtiene la lista de chats activos (usuarios con los que se ha intercambiado mensajes).
-     * @return Lista de nombres de usuario
+     * Obtiene la lista de chats activos (contactos con los que se ha conversado)
+     * @return Lista de nombres de contactos
      */
     List<String> getActiveChats();
     
+    
+    // ============ OPERACIONES DE AMIGOS ============
+    
     /**
-     * Busca usuarios en el sistema.
-     * @param query Texto de búsqueda (nombre de usuario)
+     * Busca usuarios en el sistema
+     * @param query Texto de búsqueda
      * @return Lista de usuarios que coinciden con la búsqueda
      */
     List<String> searchUsers(String query);
     
     /**
-     * Obtiene la lista de amigos del usuario actual.
-     * @return Lista de nombres de usuario que son amigos
-     */
-    List<String> getFriends();
-    
-    // ============ SOLICITUDES DE AMISTAD ============
-    
-    /**
-     * Envía una solicitud de amistad a otro usuario.
-     * @param username Usuario al que se enviará la solicitud
+     * Envía una solicitud de amistad
+     * @param username Usuario al que se envía la solicitud
      * @return true si la solicitud se envió correctamente
      */
     boolean sendFriendRequest(String username);
     
     /**
-     * Obtiene las solicitudes de amistad pendientes.
-     * @return Lista de nombres de usuario que han enviado solicitudes
+     * Obtiene la lista de amigos del usuario actual
+     * @return Lista de nombres de amigos
+     */
+    List<String> getFriends();
+    
+    /**
+     * Obtiene las solicitudes de amistad pendientes
+     * @return Lista de usuarios que han enviado solicitudes
      */
     List<String> getPendingFriendRequests();
     
     /**
-     * Acepta una solicitud de amistad.
-     * @param username Usuario cuya solicitud se aceptará
-     * @return true si la operación fue exitosa
+     * Acepta una solicitud de amistad
+     * @param username Usuario cuya solicitud se acepta
+     * @return true si se aceptó correctamente
      */
     boolean acceptFriendRequest(String username);
     
     /**
-     * Rechaza una solicitud de amistad.
-     * @param username Usuario cuya solicitud se rechazará
-     * @return true si la operación fue exitosa
+     * Rechaza una solicitud de amistad
+     * @param username Usuario cuya solicitud se rechaza
+     * @return true si se rechazó correctamente
      */
     boolean rejectFriendRequest(String username);
-    
-    // ============ ESTADO ============
-    
-    /**
-     * Verifica si el cliente está conectado al servidor.
-     * @return true si hay conexión activa
-     */
-    boolean isConnected();
-    
-    /**
-     * Obtiene el nombre del usuario actual.
-     * @return Nombre de usuario o null si no hay sesión activa
-     */
-    String getCurrentUsername();
 }

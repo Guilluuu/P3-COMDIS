@@ -1,0 +1,92 @@
+./src/ModernChatUI.java:64: error: cannot find symbol
+        mainPanel.add(loginPanel, "login");
+                      ^
+  symbol:   variable loginPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:65: error: cannot find symbol
+        mainPanel.add(mainAppPanel, "main");
+                      ^
+  symbol:   variable mainAppPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:73: error: cannot find symbol
+        loginPanel = new JPanel(new GridBagLayout());
+        ^
+  symbol:   variable loginPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:74: error: cannot find symbol
+        loginPanel.setBackground(SECONDARY);
+        ^
+  symbol:   variable loginPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:126: error: cannot find symbol
+        loginPanel.add(contentPanel);
+        ^
+  symbol:   variable loginPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:130: error: cannot find symbol
+        component.addActionListener(new java.awt.event.ActionListener() {
+                 ^
+  symbol:   method addActionListener(<anonymous ActionListener>)
+  location: variable component of type JComponent
+./src/ModernChatUI.java:171: error: cannot find symbol
+        mainAppPanel = new JPanel(new BorderLayout());
+        ^
+  symbol:   variable mainAppPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:172: error: cannot find symbol
+        mainAppPanel.setBackground(Color.WHITE);
+        ^
+  symbol:   variable mainAppPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:199: error: cannot find symbol
+        mainAppPanel.add(headerPanel, BorderLayout.NORTH);
+        ^
+  symbol:   variable mainAppPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:203: error: cannot find symbol
+        mainTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:204: error: cannot find symbol
+        mainTabbedPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:206: error: cannot find symbol
+        mainTabbedPane.addTab("💬 Chat", createChatPanel());
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:207: error: cannot find symbol
+        mainTabbedPane.addTab("👥 Amigos", createFriendsPanel());
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:208: error: cannot find symbol
+        mainTabbedPane.addTab("📨 Solicitudes", createRequestsPanel());
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:209: error: cannot find symbol
+        mainTabbedPane.addTab("⚙️ Perfil", createProfilePanel());
+        ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:211: error: cannot find symbol
+        mainAppPanel.add(mainTabbedPane, BorderLayout.CENTER);
+                         ^
+  symbol:   variable mainTabbedPane
+  location: class ModernChatUI
+./src/ModernChatUI.java:211: error: cannot find symbol
+        mainAppPanel.add(mainTabbedPane, BorderLayout.CENTER);
+        ^
+  symbol:   variable mainAppPanel
+  location: class ModernChatUI
+./src/ModernChatUI.java:446: error: cannot find symbol
+        String password = new String(loginPassField.getPassword());
+                                                   ^
+  symbol:   method getPassword()
+  location: variable loginPassField of type JTextField
+18 errors
+make: *** [Makefile:4: state] Error 1
